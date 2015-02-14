@@ -1,20 +1,22 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
+import os
 from skimage import io, exposure
 
-def preprocess(imgfile):
+def preprocess(imgpath, UPLOAD_FOLDER, filename):
     '''
     Takes an image name or url path as input, and returns a preprocessed
     image suitable for the mallampati score detection algorithm to work on.
     '''       
     # read & convert to grayscale
-    image = io.imread(imgfile, as_grey = True)
+    image = io.imread(imgpath, as_grey = True)
+    #image = color.rgb2gray(image)
     
     # Adaptive Equalization
-    image = exposure.equalize_adapthist(image)
+    image = exposure.equalize_hist(image)
     
-    return image
+    # save to disk
+    io.imsave(os.path.join(UPLOAD_FOLDER, "gray_" + filename), image)
     
 if __name__ == '__main__':
     img = preprocess('./source_test_images/example.jpg')
