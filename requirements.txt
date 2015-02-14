@@ -1,2 +1,3 @@
 # package rquirement list
+six
 scikit-image
