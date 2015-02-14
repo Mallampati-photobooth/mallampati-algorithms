@@ -3,19 +3,18 @@ python:
   - "3.3"
   
 # command to install dependencies
-before_install:
- - "pip install cython>=0.21"
- - "pip install matplotlib>=1.1.0"
- - "pip install numpy>=1.6.1"
- - "pip install scipy>=0.9"
- - "pip install six>=1.3"
- - "pip install networkx>=1.8"
- - "pip install pillow>=1.7.8"
-
 install:
+# Install conda
+  - sudo pip install conda
+  # install deps
+  - sudo conda init
+  - sudo conda update conda --yes
+  - deps='pip numpy scipy cython nose matplotlib scikit-image'
+  - conda create -p $HOME/py --yes $deps "python=$TRAVIS_PYTHON_VERSION"
+  - export PATH=$HOME/py/bin:$PATH
+
   - "pip install -r requirements.txt"
   - "pip install coveralls"
-  - "pip install nose"
 # command to run tests
 script:
   nosetests --with-coverage
