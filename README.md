@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/Mallampati-photobooth/mallampati-rest.svg?branch=master)](https://travis-ci.org/Mallampati-photobooth/mallampati-image)
-[![Coverage Status](https://coveralls.io/repos/Mallampati-photobooth/mallampati-rest/badge.svg)](https://coveralls.io/r/Mallampati-photobooth/mallampati-image)
+[![Build Status](https://travis-ci.org/Mallampati-photobooth/mallampati-image.svg?branch=master)](https://travis-ci.org/Mallampati-photobooth/mallampati-image)
+[![Coverage Status](https://coveralls.io/repos/Mallampati-photobooth/mallampati-image/badge.svg)](https://coveralls.io/r/Mallampati-photobooth/mallampati-image)
 
 # mallampati-rest
 Repo for the image preprocessing algorithm
