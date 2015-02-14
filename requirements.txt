@@ -1,2 +1,4 @@
 # package rquirement list
+cython
+scipy
 scikit-image
