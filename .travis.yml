@@ -1,22 +1,16 @@
 language: python
 python:
   - "3.3"
-  
-# command to install dependencies
 install:
-# Install conda
+  # Install conda
   - sudo pip install conda
   # install deps
   - sudo conda init
   - sudo conda update conda --yes
-  - deps='pip numpy scipy cython nose matplotlib scikit-image'
+  - deps='pip numpy pandas requests nose numpydoc sphinx'
   - conda create -p $HOME/py --yes $deps "python=$TRAVIS_PYTHON_VERSION"
   - export PATH=$HOME/py/bin:$PATH
-
-  - "pip install -r requirements.txt"
-  - "pip install coveralls"
-# command to run tests
+  # install your own package into the environment
+  - python setup.py install
 script:
-  nosetests --with-coverage
-after_success:
-  coveralls
+- "nosetests -w test/ -v"
