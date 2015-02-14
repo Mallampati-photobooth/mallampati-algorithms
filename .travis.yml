@@ -15,8 +15,7 @@ install:
   # install your own package into the environment
   #- python setup.py install
 script:
-- "python preprocessing.py"
-- "nosetests --with-coverage"
+  nosetests --with-coverage
 
 after_success:
   coveralls
