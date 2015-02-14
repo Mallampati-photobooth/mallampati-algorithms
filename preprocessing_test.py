@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import preprocessing
-import unittest
+import unittest, os
 
 class TestImagePreprocessing(unittest.TestCase):
 
     def test_image_is_returned(self):
-        self.assertIsNotNone(preprocessing.preprocess('./source_test_images/example.jpg'))
+        preprocessing.preprocess(
+        './source_test_images/example.jpg', '../uploads', 'example.jpg')
+        self.assertTrue(os.path.isfile('../uploads/gray_example.jpg'))
