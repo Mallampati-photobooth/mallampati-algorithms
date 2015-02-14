@@ -8,10 +8,10 @@ install:
   # install deps
   - sudo conda init
   #- sudo conda update conda --yes
-  - deps='pip numpy scipy nose scikit-image'
+  - deps='pip numpy scipy nose nose-cov scikit-image'
   - conda create -p $HOME/py --yes $deps "python=$TRAVIS_PYTHON_VERSION"
   - export PATH=$HOME/py/bin:$PATH
   # install your own package into the environment
   #- python setup.py install
 script:
-- "nosetests -w test/ -v"
+- "nosetests --with-coverage"
