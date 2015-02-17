@@ -9,7 +9,7 @@ class TestImagePreprocessing(unittest.TestCase):
     def tearDown(self):
         try:
             os.remove('./source_test_images/gray_example.jpg')
-        except:
+        except:  # pragma: no cover
             pass
         
     def test_image_is_returned(self):
