@@ -1,24 +1,61 @@
 #!/usr/bin/env python
 
 import os
-from skimage import io, exposure
+from skimage import io, exposure, color
+from skimage.transform import pyramid_gaussian
+from skimage.filters.rank import median, autolevel
+from skimage.morphology import disk
+from skimage.filters import sobel
+from skimage.restoration import denoise_bilateral
+from skimage.feature import canny
+import numpy as np
 
 def preprocess(imgpath, UPLOAD_FOLDER, filename):
     '''
     Takes an image name or url path as input, and returns a preprocessed
     image suitable for the mallampati score detection algorithm to work on.
     '''       
+    io.use_plugin('pil')    
+    
     # read & convert to grayscale
     image = io.imread(imgpath, as_grey = True)
-    #image = color.rgb2gray(image)
     
-    # Adaptive Equalization
-    image = exposure.equalize_hist(image)
+    # Histogram equalization
+    image = exposure.equalize_adapthist(image, clip_limit = 0.03)
     
+    # filter
+    #image = denoise_bilateral(image, sigma_range=3, sigma_spatial=150)
+    #image = median(image, disk(20))
+    # edge detection
+    #image = autolevel(image, disk(100))
+    #image = sobel(image)
+    #image = canny(image, sigma=3)
+    
+    # build image pyramid
+    rows, cols = image.shape
+    pyramid = tuple(pyramid_gaussian(image, downscale=2))
+    composite_image = np.zeros((rows, cols + cols / 2), dtype=np.double)
+    composite_image[:rows, :cols] = pyramid[0]
+    i_row = 0
+    for p in pyramid[1:]:
+        n_rows, n_cols = p.shape
+        try:
+            composite_image[i_row:i_row + n_rows, cols:cols + n_cols] = p
+            i_row += n_rows
+            #cols += n_cols
+        except:
+            continue
+        
     # save to disk
-    io.imsave(os.path.join(UPLOAD_FOLDER, "gray_" + filename), image)
+    #io.imsave(os.path.join(UPLOAD_FOLDER, "gray_" + filename), composite_image)
+    
+    # debug
+    return composite_image    
     
 if __name__ == '__main__':
-    img = preprocess('./source_test_images/example.jpg')
+    img = preprocess('./source_test_images/mallampati.jpg',
+                     './source_test_images',
+                     'mallampati.jpg')
     io.imshow(img)
     io.show()
+    
