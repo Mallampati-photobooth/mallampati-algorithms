@@ -1,13 +1,8 @@
 #!/usr/bin/env python
 
 import os
-from skimage import io, exposure, color
+from skimage import io, exposure
 from skimage.transform import pyramid_gaussian
-from skimage.filters.rank import median, autolevel
-from skimage.morphology import disk
-from skimage.filters import sobel
-from skimage.restoration import denoise_bilateral
-from skimage.feature import canny
 import numpy as np
 
 def preprocess(imgpath, UPLOAD_FOLDER, filename):
@@ -22,15 +17,7 @@ def preprocess(imgpath, UPLOAD_FOLDER, filename):
     
     # Histogram equalization
     image = exposure.equalize_adapthist(image, clip_limit = 0.03)
-    
-    # filter
-    #image = denoise_bilateral(image, sigma_range=3, sigma_spatial=150)
-    #image = median(image, disk(20))
-    # edge detection
-    #image = autolevel(image, disk(100))
-    #image = sobel(image)
-    #image = canny(image, sigma=3)
-    
+
     # build image pyramid
     rows, cols = image.shape
     pyramid = tuple(pyramid_gaussian(image, downscale=2))
@@ -47,10 +34,10 @@ def preprocess(imgpath, UPLOAD_FOLDER, filename):
             continue
         
     # save to disk
-    #io.imsave(os.path.join(UPLOAD_FOLDER, "gray_" + filename), composite_image)
+    io.imsave(os.path.join(UPLOAD_FOLDER, "gray_" + filename), composite_image)
     
     # debug
-    return composite_image    
+    #return composite_image    
     
 if __name__ == '__main__':
     img = preprocess('./source_test_images/mallampati.jpg',
