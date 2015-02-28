@@ -2,21 +2,29 @@
 
 import os
 from skimage import io, exposure
+from skimage.filter import threshold_otsu
 from skimage.transform import pyramid_gaussian
 import numpy as np
 
 def preprocess(imgpath, UPLOAD_FOLDER, filename):
     '''
     Takes an image name or url path as input, and returns a preprocessed
-    image suitable for the mallampati score detection algorithm to work on.
+    array of 0 & 1 suitable for the mallampati score detection algorithm.
     '''       
     io.use_plugin('pil')    
     
     # read & convert to grayscale
     image = io.imread(imgpath, as_grey = True)
-    
+
     # Histogram equalization
     image = exposure.equalize_adapthist(image, clip_limit = 0.03)
+
+    # Invert colors
+    #image = np.invert(image)
+    
+    # Binarization
+    thresh = threshold_otsu(image)
+    image = image > thresh
 
     # build image pyramid
     rows, cols = image.shape
@@ -29,20 +37,19 @@ def preprocess(imgpath, UPLOAD_FOLDER, filename):
         try:
             composite_image[i_row:i_row + n_rows, cols:cols + n_cols] = p
             i_row += n_rows
-            #cols += n_cols
         except:
             continue
-        
+
     # save to disk
-    io.imsave(os.path.join(UPLOAD_FOLDER, "gray_" + filename), composite_image)
+    np.save(os.path.join(UPLOAD_FOLDER, filename.rsplit('.', 1)[0]),
+            composite_image.astype(int))
     
     # debug
+    #print(image.astype(int))
+    #print(color.shape)
     #return composite_image    
     
 if __name__ == '__main__':
     img = preprocess('./source_test_images/mallampati.jpg',
                      './source_test_images',
                      'mallampati.jpg')
-    io.imshow(img)
-    io.show()
-    

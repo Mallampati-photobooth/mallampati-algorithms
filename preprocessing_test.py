@@ -8,12 +8,12 @@ class TestImagePreprocessing(unittest.TestCase):
 
     def tearDown(self):
         try:
-            os.remove('./source_test_images/gray_example.jpg')
+            os.remove('./source_test_images/mallampati.npy')
         except:  # pragma: no cover
             pass
         
     def test_image_is_returned(self):
-        preprocessing.preprocess('./source_test_images/example.jpg',
-                                 './source_test_images', 'example.jpg')
+        preprocessing.preprocess('./source_test_images/mallampati.jpg',
+                                 './source_test_images', 'mallampati.jpg')
         self.assertTrue(os.path.isfile(
-            './source_test_images/gray_example.jpg'))
+            './source_test_images/mallampati.npy'))
